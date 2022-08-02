@@ -1,5 +1,5 @@
 <div class="container mt-3">
-  <form action="/restaurants" method="POST">
+  <form action="/restaurant/edit/{{restaurant._id}}" method="POST">
     <div class="form-group">
       <label for="name">餐廳名稱 Name</label>
       <input type="text" name="name" class="form-control" id="name" placeholder="輸入餐廳名稱" value={{restaurant.name}}>
@@ -37,6 +37,6 @@
       <input type="text" name="description" class="form-control" id="description" placeholder="輸入餐廳描述" value={{restaurant.description}}>
     </div>
 
-    <button type="submit" class="btn btn-primary">建立新的餐廳</button>
+    <button type="submit" class="btn btn-primary">更新餐廳資訊</button>
   </form>
 </div>
