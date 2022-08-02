@@ -29,6 +29,9 @@ const restaurant = require('./models/restaurant')
 app.engine('handlebars', exphbs( {defaultLayout: 'main'} ))
 app.set('view engine', 'handlebars')
 
+// 設定 body-parser
+app.use(express.urlencoded({ extended: true }))
+
 app.use( express.static('public') )
 
 // 查看首頁
@@ -64,9 +67,35 @@ app.get('/search', (req, res) => {
   searchedRestaurants.length ? res.render('index', { restaurant: searchedRestaurants, keyword: keyword }) : res.render('index', { noResultMessage: noResultMessage, keyword: keyword })
 })
 
-// 新增餐廳
+// 查看「新增餐廳」頁面
 app.get('/restaurant/add', (req,res) => {
   res.render('create')
+})
+
+// 新增餐廳
+app.post('/restaurants', (req,res) => {
+  const name = req.body.name
+  const name_en = req.body.name_en
+  const category = req.body.category
+  const image = req.body.image
+  const location = req.body.location
+  const phone = req.body.phone
+  const google_map = req.body.google_map
+  const rating = req.body.rating
+  const description = req.body.description
+  return Restaurant.create({
+              name,
+              name_en,
+              category,
+              image,
+              location,
+              phone,
+              google_map,
+              rating,
+              description
+            })
+          .then( () => res.redirect('/'))
+          .catch( error => console.log(error) )
 })
 
 // 監聽
