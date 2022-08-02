@@ -98,6 +98,15 @@ app.post('/restaurants', (req,res) => {
           .catch( error => console.log(error) )
 })
 
+// 取得編輯餐廳頁面
+app.get('/restaurants/edit/:id', (req,res) => {
+  const id = req.params.id
+  Restaurant.findById(id)
+    .lean()
+    .then( restaurant => {res.render('edit', {restaurant})})
+    .catch( error => console.log(error))
+})
+
 // 監聽
 app.listen(port, () => {
   console.log(`server listen on http://localhost:${port}`)
