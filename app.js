@@ -107,8 +107,12 @@ app.get('/restaurants/edit/:id', (req,res) => {
     .catch( error => console.log(error))
 })
 
+// 編輯餐廳資訊
 app.post('/restaurant/edit/:id', (req,res) => {
   const id = req.params.id
+  
+  // const updatedRestaurant = req.body
+
   const name = req.body.name
   const name_en = req.body.name_en
   const category = req.body.category
@@ -137,7 +141,15 @@ app.post('/restaurant/edit/:id', (req,res) => {
           .catch( error => console.log(error) )
 })
 
+// 刪除餐廳
+app.post('/restaurant/delete/:id', (req,res) => {
+  const id = req.params.id
 
+  return Restaurant.findById(id)
+          .then( restaurant => restaurant.remove() )
+          .then( () => res.redirect('/') )
+          .catch( error => console.log(error) )
+})
 
 // 監聽
 app.listen(port, () => {
