@@ -6,7 +6,8 @@ const port = 3000
 // import mongoose
 const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  
+
+// connect to database
 const db = mongoose.connection
 
 db.on('error', () => {
@@ -18,9 +19,6 @@ db.once('open', () => {
 })
 
 const Restaurant = require('./models/restaurant')
-
-// 引入 json 資料
-const restaurantsInfos = require('./restaurant.json')
 
 // import express-handlebars
 const exphbs = require('express-handlebars')
@@ -42,7 +40,6 @@ app.get('/', (req,res) => {
       res.render('index', { restaurants })
     })
     .catch('error', error => console.log(error))
-  
 })
 
 // 查看單一餐廳頁面
@@ -59,12 +56,17 @@ app.get('/search', (req, res) => {
   const keyword = req.query.keyword
   const noResultMessage = '查無資料，請更換關鍵字或回到首頁'
 
-  const searchedRestaurants = restaurantsInfos.results.filter((restaurant) => {
-    return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase())
-  })
-
-  // 根據搜尋結果調整頁面資訊
-  searchedRestaurants.length ? res.render('index', { restaurant: searchedRestaurants, keyword: keyword }) : res.render('index', { noResultMessage: noResultMessage, keyword: keyword })
+  Restaurant.find()
+    .lean()
+    .then( restaurants => {
+      const searchedRestaurants = restaurants.filter((restaurant) => {
+        return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase())
+      })
+      
+      // 根據搜尋結果渲染頁面
+      searchedRestaurants.length ? res.render('index', { restaurants: searchedRestaurants, keyword: keyword }) : res.render('index', { noResultMessage: noResultMessage, keyword: keyword })
+    })
+    .catch( error => console.log( error ) )
 })
 
 // 查看「新增餐廳」頁面
@@ -74,25 +76,16 @@ app.get('/restaurant/add', (req,res) => {
 
 // 新增餐廳
 app.post('/restaurants', (req,res) => {
-  const name = req.body.name
-  const name_en = req.body.name_en
-  const category = req.body.category
-  const image = req.body.image
-  const location = req.body.location
-  const phone = req.body.phone
-  const google_map = req.body.google_map
-  const rating = req.body.rating
-  const description = req.body.description
   return Restaurant.create({
-              name,
-              name_en,
-              category,
-              image,
-              location,
-              phone,
-              google_map,
-              rating,
-              description
+              name: req.body.name,
+              name_en: req.body.name_en,
+              category: req.body.category,
+              image: req.body.image,
+              location: req.body.location,
+              phone: req.body.phone,
+              google_map: req.body.google_map,
+              rating: req.body.rating,
+              description: req.body.description
             })
           .then( () => res.redirect('/'))
           .catch( error => console.log(error) )
@@ -110,30 +103,18 @@ app.get('/restaurants/edit/:id', (req,res) => {
 // 編輯餐廳資訊
 app.post('/restaurant/edit/:id', (req,res) => {
   const id = req.params.id
-  
-  // const updatedRestaurant = req.body
-
-  const name = req.body.name
-  const name_en = req.body.name_en
-  const category = req.body.category
-  const image = req.body.image
-  const location = req.body.location
-  const phone = req.body.phone
-  const google_map = req.body.google_map
-  const rating = req.body.rating
-  const description = req.body.description
 
   return Restaurant.findById(id)
           .then( restaurant => {
-            restaurant.name = name
-            restaurant.name_en = name_en
-            restaurant.category = category
-            restaurant.image = image
-            restaurant.location = location
-            restaurant.phone = phone
-            restaurant.google_map = google_map
-            restaurant.rating = rating
-            restaurant.description = description
+            restaurant.name = req.body.name
+            restaurant.name_en = req.body.name_en
+            restaurant.category = req.body.category
+            restaurant.image = req.body.image
+            restaurant.location = req.body.location
+            restaurant.phone = req.body.phone
+            restaurant.google_map = req.body.google_map
+            restaurant.rating = req.body.rating
+            restaurant.description = req.body.description
 
             return restaurant.save()
           })
