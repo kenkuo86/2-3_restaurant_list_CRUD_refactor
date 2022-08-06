@@ -1,5 +1,5 @@
 <div class="container mt-3">
-  <form action="/restaurant/edit/{{restaurant._id}}" method="POST" id="form" novalidate>
+  <form action="/restaurant/{{restaurant._id}}?_method=PUT" method="POST" id="form" novalidate>
     <div class="form-group">
       <label for="name">餐廳名稱 Name</label>
       <input type="text" name="name" class="form-control" id="name" placeholder="輸入餐廳名稱" value="{{restaurant.name}}" required>

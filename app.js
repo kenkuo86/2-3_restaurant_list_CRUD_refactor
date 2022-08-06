@@ -7,6 +7,10 @@ const port = 3000
 const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
+// 引入 method-override
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'))
+
 // connect to database
 const db = mongoose.connection
 
@@ -101,7 +105,7 @@ app.get('/restaurants/edit/:id', (req,res) => {
 })
 
 // 編輯餐廳資訊
-app.post('/restaurant/edit/:id', (req,res) => {
+app.put('/restaurant/:id', (req,res) => {
   const id = req.params.id
 
   return Restaurant.findById(id)
@@ -123,7 +127,7 @@ app.post('/restaurant/edit/:id', (req,res) => {
 })
 
 // 刪除餐廳
-app.post('/restaurant/delete/:id', (req,res) => {
+app.delete('/restaurant/:id', (req,res) => {
   const id = req.params.id
 
   return Restaurant.findById(id)
