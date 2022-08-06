@@ -1,17 +1,8 @@
 // 將種子資料打入資料庫
-
-const mongoose = require('mongoose')
 const Restaurant = require('../restaurant') // 載入 restaurant model
 const restaurantInfos = require('../../restaurant.json')
 const restaurantList = restaurantInfos.results
-
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-
-const db = mongoose.connection
-
-db.on('error', () => {
-  console.log('DB connection failed')
-})
+const db = require('../../config/mongoose')
 
 db.once('open', () => {
   console.log('DB connected !')

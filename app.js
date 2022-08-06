@@ -3,24 +3,12 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-// import mongoose
-const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+// 資料庫連線
+require('./config/mongoose')
 
 // 引入 method-override
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
-
-// connect to database
-const db = mongoose.connection
-
-db.on('error', () => {
-  console.log('DB connection failed')
-})
-
-db.once('open', () => {
-  console.log('DB connected !')
-})
 
 const Restaurant = require('./models/restaurant')
 
