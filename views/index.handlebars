@@ -2,7 +2,7 @@
 <div class="container search-bar">
   <div class="search-bar-outer">
     <div class="search-bar-inner">
-      <form action="/search">
+      <form action="/search" method="GET">
         <h4 class="mb-2">尋找餐廳：</h4>
         <div class="input-group">
           <input type="text" name="keyword" class="form-control" placeholder="輸入餐廳、分類" aria-label="Restaurant Name..."
@@ -13,7 +13,7 @@
         </div>
       </form>
     </div> 
-    <a class="btn btn-primary mt-2" href="./restaurant/add" role="button">新增餐廳</a>
+    <a class="btn btn-primary mt-2" href="./restaurants/add" role="button">新增餐廳</a>
   </div>
 </div>
 
@@ -43,7 +43,7 @@
               <div class="d-flex justify-content-end align-items-center border-top pb-2">
                 <a class="mx-2 mt-2" href="./restaurants/edit/{{this._id}}"> Edit </a>
                 <a class="mx-2 mt-2" href="./restaurants/{{this._id}}"> Detail </a>
-                <form class="mx-2 mt-2" action="/restaurant/{{this._id}}?_method=DELETE" method="POST">
+                <form class="mx-2 mt-2" action="/restaurants/{{this._id}}?_method=DELETE" method="POST">
                   <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
               </div>
