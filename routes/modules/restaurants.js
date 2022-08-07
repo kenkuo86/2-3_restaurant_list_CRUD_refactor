@@ -4,26 +4,26 @@ const router = express.Router()
 const Restaurant = require('../../models/restaurant')
 
 // 查看「新增餐廳」頁面 - fail
-// router.get('/add', (req, res) => {
-//   res.render('create')
-// })
+router.get('/add', (req, res) => {
+  res.render('create')
+})
 
 // // 新增餐廳
-// app.post('/restaurants', (req,res) => {
-//   return Restaurant.create({
-//               name: req.body.name,
-//               name_en: req.body.name_en,
-//               category: req.body.category,
-//               image: req.body.image,
-//               location: req.body.location,
-//               phone: req.body.phone,
-//               google_map: req.body.google_map,
-//               rating: req.body.rating,
-//               description: req.body.description
-//             })
-//           .then( () => res.redirect('/'))
-//           .catch( error => console.log(error) )
-// })
+router.post('/', (req,res) => {
+  return Restaurant.create({
+              name: req.body.name,
+              name_en: req.body.name_en,
+              category: req.body.category,
+              image: req.body.image,
+              location: req.body.location,
+              phone: req.body.phone,
+              google_map: req.body.google_map,
+              rating: req.body.rating,
+              description: req.body.description
+            })
+          .then( () => res.redirect('/'))
+          .catch( error => console.log(error) )
+})
 
 // 取得編輯餐廳頁面
 router.get('/edit/:id', (req, res) => {
@@ -64,6 +64,15 @@ router.delete('/:id', (req,res) => {
           .then( restaurant => restaurant.remove() )
           .then( () => res.redirect('/') )
           .catch( error => console.log(error) )
+})
+
+// 查看單一餐廳頁面
+router.get('/:id', (req, res) => {
+  const id = req.params.id
+  Restaurant.findById(id)
+    .lean()
+    .then(restaurant => { res.render('show', { restaurant }) })
+    .catch(error => console.log(error))
 })
 
 module.exports = router

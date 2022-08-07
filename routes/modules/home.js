@@ -12,15 +12,6 @@ router.get('/', (req, res) => {
     .catch('error', error => console.log(error))
 })
 
-// 查看單一餐廳頁面
-router.get('/restaurants/:id', (req, res) => {
-  const id = req.params.id
-  Restaurant.findById(id)
-    .lean()
-    .then(restaurant => { res.render('show', { restaurant }) })
-    .catch(error => console.log(error))
-})
-
 // 搜尋功能
 router.get('/search', (req, res) => {
   const keyword = req.query.keyword
